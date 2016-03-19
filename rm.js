@@ -6,6 +6,12 @@ let co = require('co')
 let path = require("path")
 
 let rm = co.wrap(function*(rootpath) {	
+	let rootStat = yield fs.stat(rootpath)
+	if(!rootStat.isDirectory()) {
+		yield fs.unlink(rootpath)
+		return
+	}
+
 	let filenames = yield fs.readdir(rootpath)
 	for(let file of filenames) {
 		let filepath = path.join(rootpath, file)
